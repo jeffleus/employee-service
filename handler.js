@@ -134,18 +134,13 @@ module.exports.delete = (event, context, callback) => {
       })
   }
 	
-  Employees.delete(id).then(function(job) {
-	  console.log('SMS: calling msg service to send sms');
-	  var msg = 'VISION: Job created w/ id: ' + job.id + ' and title: ' + job.title;
-	  console.log(msg);
-	  return SMS.sendText(msg, '+13108771151');
-  }).then(function(data) {
-      console.log('SMS: successful message send called');
+  Employees.delete(id).then(function(count) {
+      console.log('(' + count + ') - employee successfully deleted');
       callback(null, response);
   }).catch(function(err) {
-      console.log('SMS: error during message send called');
+      console.log('There was an error deleting the employee record');
       console.error(err);
-      callback(err);
+      callback(errpath);
   }).finally(function() {
       Jobs.close();
   });

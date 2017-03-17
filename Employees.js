@@ -57,7 +57,7 @@ module.exports.create = function(json) {
 	});
 };
 
-module.exports.update = function(id, json) {
+module.exports.update = function(json) {
 	return sequelize.sync().then(function() {
 		console.info('EMP: update a single employee using JSON provided');
 		console.error('need to add json validation to employee update');
