@@ -46,6 +46,8 @@ module.exports.get = (event, context, callback) => {
       input: event,
     }),
   };
+    //check the event path params for an employee id to use during lookup
+    var id = (event.pathParameters && event.pathParameters.eid) ? event.pathParameters.eid : null;
     
     Employees.get(id).then(function(result) {
         console.log(result.employees[0]);
