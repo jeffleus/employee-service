@@ -107,12 +107,46 @@ module.exports.update = (event, context, callback) => {
     var json = event.body;
     var id = (event.pathParameters && event.pathParameters.eid) ? event.pathParameters.eid : null;
 	
-  Jobs.update(event.body).then(function(employee) {
+  Employees.update(event.body).then(function(employee) {
       console.log('employee updated using the EMP utility module');
       callback(null, response);
   }).catch(function(err) {
       console.log('There was an error updating the employee record');
       console.error(err);
       callback(err);
+  });
+};
+
+module.exports.delete = (event, context, callback) => {
+  const response = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Goodbye for Now! Your function executed successfully!',
+      input: event,
+    })
+  };
+
+  var id = (event.pathParameters && event.pathParameters.eid) ? event.pathParameters.eid : null;
+  if (!id) {
+      callback(null, {
+          statusCode: 400,
+          body: JSON.stringify({ message: 'Valid employee id was not passed to the delete method.' })
+      })
+  }
+	
+  Employees.delete(id).then(function(job) {
+	  console.log('SMS: calling msg service to send sms');
+	  var msg = 'VISION: Job created w/ id: ' + job.id + ' and title: ' + job.title;
+	  console.log(msg);
+	  return SMS.sendText(msg, '+13108771151');
+  }).then(function(data) {
+      console.log('SMS: successful message send called');
+      callback(null, response);
+  }).catch(function(err) {
+      console.log('SMS: error during message send called');
+      console.error(err);
+      callback(err);
+  }).finally(function() {
+      Jobs.close();
   });
 };

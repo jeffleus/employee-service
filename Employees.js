@@ -70,3 +70,17 @@ module.exports.update = function(id, json) {
 		});
 	});
 };
+
+module.exports.delete = function(id) {
+	return sequelize.sync().then(function() {
+		console.info('EMP: delete an employee by id');
+		return Employee.destroy({ where: { id: id } }).then(function(count) {
+			console.info('EMP: ' + count.toString() + ' employees successfully deleted');
+			return count;
+		});
+	});
+};
+
+module.exports.close = function() {
+	sequelize.close();
+};

@@ -63,6 +63,8 @@ functions:
     handler: handler.create
   update:
     handler: handler.update
+  delete:
+    handler: handler.delete
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
