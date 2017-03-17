@@ -1,5 +1,6 @@
 'use strict';
 var mysql = require('mysql');
+var Employees = require('./Employees');
 var SMS = require('./SMS');
 const AWS = require('aws-sdk');
 AWS.config.region = 'us-west-2';
@@ -34,4 +35,29 @@ SMS.sendText('YO, dis a text from Lambda!', '+13108771151').then(function(data) 
 		console.log(data);
 		callback(null, response);
 	});	
+};
+
+module.exports.get = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  var response = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Go Serverless v1.0! Your function executed successfully!',
+      input: event,
+    }),
+  };
+    
+    Employees.get(7087).then(function(result) {
+        console.log(result.employees[0]);
+        response.body = JSON.stringify({
+            message: 'Successful get command found: ' + result.count,
+            employees: result.employees
+        });
+        callback(null, response);
+    }).catch(function(err) {
+        console.log('there was an error during the get call');
+        console.error(err);
+    }).finally(function() {
+        console.info('completed the employee model get');
+    });
 };
