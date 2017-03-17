@@ -97,6 +97,7 @@ module.exports.create = (event, context, callback) => {
 };
 
 module.exports.update = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   var response = {
     statusCode: 200,
     body: JSON.stringify({
@@ -118,6 +119,7 @@ module.exports.update = (event, context, callback) => {
 };
 
 module.exports.delete = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   const response = {
     statusCode: 200,
     body: JSON.stringify({
@@ -141,7 +143,5 @@ module.exports.delete = (event, context, callback) => {
       console.log('There was an error deleting the employee record');
       console.error(err);
       callback(errpath);
-  }).finally(function() {
-      Jobs.close();
   });
 };
