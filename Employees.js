@@ -45,3 +45,16 @@ function _getAll() {
 		});
 	});
 }
+
+module.exports.create = function(json) {
+	return sequelize.sync().then(function() {
+		console.info('EMP: create a new employee using JSON provided');
+		console.error('need to add json validation to employee creation');
+		return Employee.create(json).then(function(employee) {
+			console.info('employee successfully created');
+			return employee;
+		});
+	}).finally(function() {
+		//sequelize.close();
+	});
+};

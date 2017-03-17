@@ -47,7 +47,7 @@ module.exports.get = (event, context, callback) => {
     }),
   };
     
-    Employees.get(7087).then(function(result) {
+    Employees.get(id).then(function(result) {
         console.log(result.employees[0]);
         response.body = JSON.stringify({
             message: 'Successful get command found: ' + result.count,
@@ -59,5 +59,37 @@ module.exports.get = (event, context, callback) => {
         console.error(err);
     }).finally(function() {
         console.info('completed the employee model get');
+    });
+};
+
+module.exports.create = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  var response = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Go Serverless v1.0! Your function executed successfully!',
+      input: event,
+    }),
+  };
+    
+    var json = event.body;
+    var employee;
+    
+    Employees.create(json).then(function(emp) {
+        console.log('employee created, sending sms alert to confirm');
+        employee = emp
+        var msg = 'VISION: successfully created a new employee - ' + emp.id;
+        return SMS.sendText(msg, '+13108771151');
+    }).then(function(result) {
+        response.body = JSON.stringify({
+            message: 'Successfully created a new employee: ' + employee.id,
+            employee: employee
+        });
+        callback(null, response);
+    }).catch(function(err) {
+        console.log('there was an error creating and employee');
+        console.error(err);
+    }).finally(function() {
+        console.info('completed the employee model create');
     });
 };
