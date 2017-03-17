@@ -95,3 +95,24 @@ module.exports.create = (event, context, callback) => {
         console.info('completed the employee model create');
     });
 };
+
+module.exports.update = (event, context, callback) => {
+  var response = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Goodbye for Now! Your function executed successfully!',
+      input: event,
+    }),
+  };
+    var json = event.body;
+    var id = (event.pathParameters && event.pathParameters.eid) ? event.pathParameters.eid : null;
+	
+  Jobs.update(event.body).then(function(employee) {
+      console.log('employee updated using the EMP utility module');
+      callback(null, response);
+  }).catch(function(err) {
+      console.log('There was an error updating the employee record');
+      console.error(err);
+      callback(err);
+  });
+};

@@ -54,7 +54,19 @@ module.exports.create = function(json) {
 			console.info('employee successfully created');
 			return employee;
 		});
-	}).finally(function() {
-		//sequelize.close();
+	});
+};
+
+module.exports.update = function(id, json) {
+	return sequelize.sync().then(function() {
+		console.info('EMP: update a single employee using JSON provided');
+		console.error('need to add json validation to employee update');
+		return Employee.update(
+			json,
+			{ where: { id: json.id } }
+		).then(function(result) {
+			console.info('EMP: employee successfully updated');
+			return result;
+		});
 	});
 };
