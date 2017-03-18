@@ -59,12 +59,32 @@ functions:
     handler: handler.hello
   get:
     handler: handler.get
+    timeout: 3
+    events:
+      - http:
+          path: employees/{eid}
+          method: get
   create:
     handler: handler.create
+    timeout: 3
+    events:
+      - http:
+          path: employees
+          method: post
   update:
     handler: handler.update
+    timeout: 3
+    events:
+      - http:
+          path: employees
+          method: put
   delete:
     handler: handler.delete
+    timeout: 3
+    events:
+      - http:
+          path: employees/{eid}
+          method: delete
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
